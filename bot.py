@@ -19,8 +19,12 @@ app = Client(
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
-    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them</b>")
+    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /qoute")
 
+@app.on_message(filters.command("quote") & filters.private)
+async def send_quote_of_the_day(client, message):
+    quote = wikiquotes.quote_of_the_day("english")
+    await message.reply(f"<code>{quote}</code>")
 
 @app.on_message(filters.text & filters.private)
 async def send_quote(_, message):
