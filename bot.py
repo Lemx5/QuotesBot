@@ -5,7 +5,7 @@ import random
 from datetime import datetime, timedelta
 import pytz
 import os
-from quart import Quart, jsonifyd
+from quart import Quart
 
 # Set up your Pyrogram API credentials
 API_ID = os.getenv("API_ID")
