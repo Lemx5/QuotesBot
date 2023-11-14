@@ -46,13 +46,6 @@ def get_random_quote():
         return None
 
 
-async def send_daily_quote():
-    chat_id = CHANNEL
-    quote = get_random_quote()
-    if quote:
-        await pyro_client.send_message(chat_id, f"<code>{quote}</code>")
-
-
 async def schedule_daily_quotes():
     while True:
         now = datetime.now(kolkata_timezone)
@@ -68,6 +61,16 @@ async def schedule_daily_quotes():
             time_until_next_day = (next_day - now).total_seconds()
             await asyncio.sleep(time_until_next_day)
             asyncio.create_task(send_daily_quote())
+
+async def send_daily_quote():
+    chat_id = CHANNEL
+    
+    # Ensure the Pyrogram client is connected before sending the message
+    await pyro_client.start()
+    
+    quote = get_random_quote()
+    if quote:
+        await pyro_client.send_message(chat_id, f"<code>{quote}</code>")
 
 
 @pyro_client.on_message(filters.command("start") & filters.private)
@@ -89,7 +92,6 @@ async def home():
 
 async def run_web_app():
     await app.run_task(host="0.0.0.0", port=8080)
-
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
