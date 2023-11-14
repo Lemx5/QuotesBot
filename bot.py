@@ -4,6 +4,7 @@ import wikiquotes
 from flask import Flask
 from threading import Thread
 import random
+import re
 
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
@@ -57,7 +58,8 @@ async def send_quote_of_the_day(client, message):
 async def send_random_quote(_, message):
     author = random.choice(indexs)
     quote = wikiquotes.random_quote(author, "english")
-    await message.reply(f"<code>{quote}</code>\n~ <b>#{author}</b>")
+    tag = re.sub(r"\s+", "_", author)
+    await message.reply(f"<code>{quote}</code>\n~ <b>#{tag}</b>")
 
 @app.on_message(filters.text & filters.private)
 async def send_quote(_, message):
@@ -79,4 +81,4 @@ def run():
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
-    app.run()      
+    app.run()
