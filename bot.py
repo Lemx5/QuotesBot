@@ -19,7 +19,7 @@ app = Client(
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
-    await message.reply("Hi there! I'm a bot that sends quotes\n\n Send me author's name to get a quote from them")
+    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them</b>")
 
 
 @app.on_message(filters.text & filters.private)
