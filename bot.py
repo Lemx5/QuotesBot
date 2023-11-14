@@ -70,12 +70,12 @@ async def schedule_daily_quotes():
             asyncio.create_task(send_daily_quote())
 
 
-@app.on_message(filters.command("start") & filters.private)
+@pyro_client.on_message(filters.command("start") & filters.private)
 async def start(_, message):
     await message.reply("Hi there! I'm a bot that sends quotes\n\n Send me author's name to get a quote from them")
 
 
-@app.on_message(filters.text & filters.private)
+@pyro_client.on_message(filters.text & filters.private)
 async def send_quote(_, message):
     author = message.text
     quote = wikiquotes.random_quote(author, "english")
