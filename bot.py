@@ -4,7 +4,6 @@ import wikiquotes
 from flask import Flask
 from threading import Thread
 import random
-import re
 
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
