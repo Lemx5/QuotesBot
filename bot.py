@@ -97,13 +97,7 @@ def run():
 
 # Start the bot and Flask simultaneously
 if __name__ == "__main__":
-    async def main():
-        await asyncio.gather(app.start(), schedule_daily_quotes())
-
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        app.stop()
-        app.run()
     t = Thread(target=run)
     t.start()
+    async def main():
+        await asyncio.gather(app.start(), schedule_daily_quotes())
