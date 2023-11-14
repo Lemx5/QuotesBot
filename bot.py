@@ -28,6 +28,20 @@ indexs = [
     "Patience", "Resilience", "Dream", "Believe", "Achieve", "Empower", "Thrive", "Connection",
     "Balance", "Innerpeace", "Enlightenment", "Kindness", "Compassion", "Generosity",
     "Forgiveness", "Grace", "Spirituality", "Transformation", "Legacy", "Purpose", "Eternity",
+    "Tony Robbins", "Oprah Winfrey", "Sheryl Sandberg", "Elon Musk", "Warren Buffett",
+    "Richard Branson", "Malala Yousafzai", "Maya Angelou", "Steve Jobs", "Michelle Obama",
+    "Innovation", "Creativity", "Leadership", "Motivational", "Self-improvement", "Mindfulness",
+    "Grit", "Ambition", "Optimism", "Self-discovery", "Empathy", "Unity", "Inclusivity", "Harmony",
+    "Health", "Wellness", "Fitness", "Nutrition", "Mindset", "Adventure", "Exploration", "Discovery",
+    "Adaptability", "Change", "Challenges", "Reflection", "Laughter", "Friendship", "Family",
+    "Community", "Collaboration", "Teamwork", "Innovation", "Learning", "Knowledge", "Curiosity",
+    "Open-mindedness", "Wisdom", "Reflection", "Mindfulness", "Purpose", "Legacy", "Impact", "Gratitude",
+    "Happiness", "Joy", "Peace", "Optimism", "Courage", "Authenticity", "Resilience", "Kindness",
+    "Compassion", "Generosity", "Forgiveness", "Empowerment", "Transformation", "Simplicity", "Balance",
+    "Nature", "Environment", "Sustainability", "Philanthropy", "Global", "Diversity", "Equality", "Justice",
+    "Peace", "Calmness", "Adventure", "Discovery", "Wonder", "Imagination", "Curiosity", "Boldness",
+    "Risk-taking", "Resourcefulness", "Vision", "Clarity", "Focus", "Discipline", "Consistency", "Action",
+    "Reflection", "Adaptability", "Integrity", "Authenticity", "Authenticity", "Mindfulness",
 ]
 
 @app.on_message(filters.command("start") & filters.private)
