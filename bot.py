@@ -5,7 +5,7 @@ import wikiquotes
 import random
 from datetime import datetime, timedelta
 import pytz
-from quart import Quart
+from quart import Quart, jsonify
 
 # Set up your Pyrogram API credentials
 API_ID = os.getenv("API_ID")
@@ -90,7 +90,7 @@ web = Quart(__name__)
 # Web app routes & home page
 @web.route("/", methods=["GET"])            
 async def home():
-    return "Bot is running!"
+    return jsonify({"status": "Alive"})
 
 # Run the web app
 async def run_web_app():
