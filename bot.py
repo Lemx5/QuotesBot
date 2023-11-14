@@ -90,7 +90,7 @@ web = Quart(__name__)
 # Web app routes & home page
 @web.route("/", methods=["GET"])            
 async def home():
-    return jsonify({"status": "Alive", "timestamp": datetime.datetime.utcnow().isoformat()})
+    return "Bot is running!"
 
 # Run the web app
 async def run_web_app():
