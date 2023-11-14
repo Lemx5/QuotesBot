@@ -1,5 +1,4 @@
 import os
-import asyncio
 from pyrogram import Client, filters
 import wikiquotes
 from flask import Flask
