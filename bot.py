@@ -5,8 +5,7 @@ import random
 from datetime import datetime, timedelta
 import pytz
 import os
-from flask import Flask
-from threading import Thread
+from quart import Quart, jsonifyd
 
 # Set up your Pyrogram API credentials
 API_ID = os.getenv("API_ID")
@@ -86,18 +85,21 @@ async def send_quote(client, message):
     await message.reply(f"<code>{quote}</code>") 
 
 # Flask configuration
-web= Flask(__name__)
+web = Quart(__name__)
 
-@web.route('/')
-def index():
-    return "Bot is running!"
+# Web app routes & home page
+@web.route("/", methods=["GET"])            
+async def home():
+    return jsonify({"status": "Alive", "timestamp": datetime.datetime.utcnow().isoformat()})
 
-def run():
-    web.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))               
+# Run the web app
+async def run_web_app():
+    await web.run_task(host="0.0.0.0", port=8080)         
 
 # Start the bot and Flask simultaneously
+# Start the bot and web app
 if __name__ == "__main__":
-    t = Thread(target=run)
-    t.start()
-    async def main():
-        await asyncio.gather(app.start(), schedule_daily_quotes())
+    loop = asyncio.get_event_loop()
+    loop.create_task(schedule_daily_quotes())
+    loop.create_task(run_web_app())
+    app.run()
