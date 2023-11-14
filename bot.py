@@ -59,26 +59,21 @@ async def send_daily_quote():
 async def schedule_daily_quotes():
     while True:
         now = datetime.now(kolkata_timezone)
-        # Set the times for the daily quotes
-        morning_time = datetime(now.year, now.month, now.day, hour=0, minute=0, second=0)
-        evening_time = datetime(now.year, now.month, now.day, hour=12, minute=0, second=0)
-        # Check if it's time for the morning quote
+        
+        # Explicitly assign timezone to morning_time and evening_time
+        morning_time = kolkata_timezone.localize(datetime(now.year, now.month, now.day, hour=0, minute=0, second=0))
+        evening_time = kolkata_timezone.localize(datetime(now.year, now.month, now.day, hour=12, minute=0, second=0))
+
         if now >= morning_time:
-            # Calculate the time until the evening
             time_until_evening = (evening_time - now).total_seconds()
-            # Wait until the evening
-            await asyncio.sleep(time_until_evening)
-            # Send the evening quote
-            await send_daily_quote()
-        # Check if it's time for the evening quote
+            asyncio.create_task(asyncio.sleep(time_until_evening))
+            asyncio.create_task(send_daily_quote())
         elif now >= evening_time:
-            # Calculate the time until the next day
             next_day = evening_time + timedelta(days=1)
             time_until_next_day = (next_day - now).total_seconds()
-            # Wait until the next day
-            await asyncio.sleep(time_until_next_day)
-            # Send the morning quote
-            await send_daily_quote()
+            asyncio.create_task(asyncio.sleep(time_until_next_day))
+            asyncio.create_task(send_daily_quote())
+
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(client, message):
