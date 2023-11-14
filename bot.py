@@ -91,9 +91,10 @@ async def send_quote_of_the_day(client, message):
 
 @app.on_message(filters.command("random") & filters.private)
 async def send_random_quote(_, message):
-    tag = random.choice(indexs)
+    adj = random.choice(indexs)
     quote = wikiquotes.random_quote(tag, "english")
-    await message.reply(f"<code>{quote}</code>\n<b>~ #{tag}</b>")
+    tag = f'<a href="https://telegram.me/QuotyBot">{adj}</a>'    
+    await message.reply(f"<code>{quote}</code>\n<b>~ {tag}</b>")
 
 @app.on_message(filters.command("authors") & filters.private)
 async def send_author_quote(_, message):
