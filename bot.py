@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import pytz
 import os
 from flask import Flask
+from threading import Thread
 
 # Set up your Pyrogram API credentials
 API_ID = os.getenv("API_ID")
@@ -52,7 +53,7 @@ async def send_daily_quote():
     chat_id = CHANNEL
     quote = get_random_quote()
     if quote:
-        await app.send_message(chat_id, f"{quote}")
+        await app.send_message(chat_id, f"<code>{quote}</code>")
 
 # Schedule the task to run twice a day (at 12 AM and 12 PM in Kolkata timezone)
 async def schedule_daily_quotes():
@@ -79,9 +80,35 @@ async def schedule_daily_quotes():
             # Send the morning quote
             await send_daily_quote()
 
-# Start the bot and the scheduled task
+@app.on_message(filters.command("start") & filters.private)
+async def start(client, message):
+    await message.reply("Hi there! I'm a bot that sends quotes\n\n Send me author's name to get a quote from them")
+
+@app.on_message(filters.text & filters.private)
+async def send_quote(client, message):
+    author = message.text
+    quote = wikiquotes.random_quote(author, "english")
+    await message.reply(f"<code>{quote}</code>") 
+
+# Flask configuration
+web= Flask(__name__)
+
+@web.route('/')
+def index():
+    return "Bot is running!"
+
+def run():
+    web.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))               
+
+# Start the bot and Flask simultaneously
 if __name__ == "__main__":
     async def main():
         await asyncio.gather(app.start(), schedule_daily_quotes())
 
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        app.stop()
+        app.run()
+    t = Thread(target=run)
+    t.start()
