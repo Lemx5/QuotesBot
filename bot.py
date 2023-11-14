@@ -97,9 +97,9 @@ async def send_random_quote(_, message):
 
 @app.on_message(filters.command("authors") & filters.private)
 async def send_author_quote(_, message):
-    authers = random.choice(authers)
+    people = random.choice(authers)
     quote = wikiquotes.random_quote(authers, "english")
-    tag = f'<a href="https://en.wikiquote.org/wiki/{author}">{author}</a>'
+    tag = f'<a href="https://en.wikiquote.org/wiki/{people}">{people}</a>'
     await message.reply(f"<code>{quote}</code>\n~ <b>{tag}</b>")
 
 @app.on_message(filters.text & filters.private)
