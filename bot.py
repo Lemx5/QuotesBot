@@ -57,7 +57,7 @@ async def send_quote_of_the_day(client, message):
 async def send_random_quote(_, message):
     author = random.choice(indexs)
     quote = wikiquotes.random_quote(author, "english")
-    await message.reply(f"<code>{quote}</code>\n~ #{author}")
+    await message.reply(f"<code>{quote}</code>\n~ <b>#{author}</b>")
 
 @app.on_message(filters.text & filters.private)
 async def send_quote(_, message):
