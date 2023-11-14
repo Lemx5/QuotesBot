@@ -46,7 +46,7 @@ indexs = [
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
-    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /quote")
+    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /random")
 
 @app.on_message(filters.command("quote") & filters.private)
 async def send_quote_of_the_day(client, message):
@@ -57,7 +57,7 @@ async def send_quote_of_the_day(client, message):
 async def send_random_quote(_, message):
     author = random.choice(indexs)
     quote = wikiquotes.random_quote(author, "english")
-    await message.reply(f"<code>{quote}</code>")
+    await message.reply(f"<code>{quote}</code>\n~ #{author}")
 
 @app.on_message(filters.text & filters.private)
 async def send_quote(_, message):
