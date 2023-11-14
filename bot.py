@@ -17,11 +17,8 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-
+# list of adjectives
 indexs = [
-    "Zig Ziglar", "Dale Carnegie", "Stephen R. Covey", "Napoleon Hill", "Jim Rohn",
-    "Brian Tracy", "Eric Thomas", "Les Brown", "Jack Canfield", "Mark Manson",
-    "Simon Sinek", "Gary Vaynerchuk", "Mel Robbins", "Grant Cardone", "Robin Sharma",
     "Motivation", "Inspiration", "Consistency", "Quotes", "Education", "Encourage",
     "Love", "Care", "Romantic", "Beautiful", "Respect", "Humanity", "Life", "Afterlife",
     "Determination", "Perseverance", "Dedication", "Success", "Wisdom", "Faith", "Courage",
@@ -29,8 +26,6 @@ indexs = [
     "Patience", "Resilience", "Dream", "Believe", "Achieve", "Empower", "Thrive", "Connection",
     "Balance", "Innerpeace", "Enlightenment", "Kindness", "Compassion", "Generosity",
     "Forgiveness", "Grace", "Spirituality", "Transformation", "Legacy", "Purpose", "Eternity",
-    "Tony Robbins", "Oprah Winfrey", "Sheryl Sandberg", "Elon Musk", "Warren Buffett",
-    "Richard Branson", "Malala Yousafzai", "Maya Angelou", "Steve Jobs", "Michelle Obama",
     "Innovation", "Creativity", "Leadership", "Motivational", "Self-improvement", "Mindfulness",
     "Grit", "Ambition", "Optimism", "Self-discovery", "Empathy", "Unity", "Inclusivity", "Harmony",
     "Health", "Wellness", "Fitness", "Nutrition", "Mindset", "Adventure", "Exploration", "Discovery",
@@ -45,6 +40,47 @@ indexs = [
     "Reflection", "Adaptability", "Integrity", "Authenticity", "Authenticity", "Mindfulness",
 ]
 
+# list of popular authors & personalities
+authers = [
+    "Zig Ziglar", "Dale Carnegie", "Stephen R. Covey", "Napoleon Hill", "Jim Rohn",
+    "Brian Tracy", "Eric Thomas", "Les Brown", "Jack Canfield", "Mark Manson",
+    "Albert Einstein", "Mahatma Gandhi", "Marie Curie", "Nelson Mandela", "Leonardo da Vinci",
+    "Coco Chanel", "Martin Luther King Jr.", "Steve Jobs", "Malala Yousafzai", "Oprah Winfrey",
+    "Abraham Lincoln", "Mother Teresa", "Bill Gates", "Rosa Parks", "Winston Churchill",
+    "Jane Goodall", "Pablo Picasso", "Billie Jean King", "Elon Musk", "Aung San Suu Kyi",
+    "Charles Darwin", "Walt Disney", "Martha Graham", "Mao Zedong", "George Washington",
+    "Sigmund Freud", "Frederick Douglass", "Anne Frank", "Katherine Johnson", "Vincent van Gogh",
+    "Wright Brothers", "Margaret Thatcher", "Bob Dylan", "Harriet Tubman", "Desmond Tutu",
+    "Helen Keller", "Michael Jordan", "Socrates", "Aristotle", "Confucius", "Joan of Arc", "Cleopatra",
+    "Thomas Edison", "Amelia Earhart", "John F. Kennedy", "Muhammad Ali", "Pele",
+    "Harper Lee", "John Lennon", "Paul McCartney", "Ravi Shankar", "Queen Elizabeth II",
+    "Harriet Beecher Stowe", "Sylvia Plath", "Roald Amundsen", "Neil Armstrong", "Buzz Aldrin",
+    "Hedy Lamarr", "Grace Hopper", "Emmeline Pankhurst", "Sojourner Truth", "Ada Lovelace",
+    "Frederick Banting", "Louis Pasteur", "Marie Antoinette", "Diana, Princess of Wales", "John Locke",
+    "Eleanor Roosevelt", "Ronald Reagan", "Harold Pinter", "Frida Kahlo", "Diego Rivera",
+    "Isaac Newton", "Mikhail Gorbachev", "Babe Ruth", "Pablo Neruda", "Deng Xiaoping",
+    "Vladimir Putin", "Aristotle Onassis", "Immanuel Kant", "Marilyn Monroe", "Rosalind Franklin",
+    "Marlon Brando", "Walt Whitman", "James Cameron", "Salvador Dalí", "Martha Stewart",
+    "Fidel Castro", "Anne Hathaway", "Charlie Chaplin", "Leo Messi", "Michael Phelps",
+    "George Lucas", "Fidel Castro", "Dolly Parton", "Stephen Hawking", "J.K. Rowling",
+    "Isaac Asimov", "Richard Feynman", "Jane Goodall", "Toni Morrison", "Oscar Wilde",
+    "Ralph Waldo Emerson", "Robert Frost", "T.S. Eliot", "Sylvia Plath", "Maya Angelou",
+    "James Baldwin", "Gabriel García Márquez", "Fidel Castro", "Dalai Lama", "Paulo Coelho",
+    "Salman Rushdie", "Kazuo Ishiguro", "Mozart", "Beethoven", "Elvis Presley",
+    "The Beatles", "David Bowie", "Michael Jackson", "Bob Marley", "Freddie Mercury",
+    "Winston Churchill", "Coco Chanel", "Billie Holiday", "Ella Fitzgerald", "Louis Armstrong",
+    "Aretha Franklin", "James Brown", "Ray Charles", "Prince", "Stevie Wonder", "Jimi Hendrix",
+    "Frank Sinatra", "Miles Davis", "John Coltrane", "Duke Ellington", "Nat King Cole",
+    "Marvin Gaye", "Sam Cooke", "Whitney Houston", "Barbra Streisand", "Maria Callas",
+    "Luciano Pavarotti", "Enrico Caruso", "Johann Sebastian Bach", "Ludwig van Beethoven",
+    "Apj Abdul Kalam", "Swami Vivekananda", "Sri Aurobindo", "Rabindranath Tagore", "Mahatma Gandhi",
+    "Mother Teresa", "Sardar Vallabhbhai Patel", "Jawaharlal Nehru", "Subhas Chandra Bose",
+    "Bhagat Singh", "Lal Bahadur Shastri", "Indira Gandhi", "Rajiv Gandhi", "Atal Bihari Vajpayee",
+    "Manmohan Singh", "Narendra Modi", "Sachin Tendulkar", "Milkha Singh", "Mary Kom",
+    "Saina Nehwal", "P. V. Sindhu", "Vishwanathan Anand", "Kapil Dev", "Sunil Gavaskar",
+]
+
+
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
     await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /random")
@@ -56,10 +92,16 @@ async def send_quote_of_the_day(client, message):
 
 @app.on_message(filters.command("random") & filters.private)
 async def send_random_quote(_, message):
-    author = random.choice(indexs)
-    quote = wikiquotes.random_quote(author, "english")
-    tag = <a href=f"https://en.wikiquote.org/wiki/{author}">{author}</a>
-    await message.reply(f"<code>{quote}</code>\n~ <b>{tag}</b>")
+    tag = random.choice(indexs)
+    quote = wikiquotes.random_quote(tag, "english")
+    await message.reply(f"<code>{quote}</code>\n<b>~ #{tag}</b>")
+
+@app.on_message(filters.command("authors") & filters.private)
+async def send_author_quote(_, message):
+    authers = random.choice(authers)
+    quote = wikiquotes.random_quote(authers, "english")
+    tag = <a href=f"https://en.wikiquote.org/wiki/{authers}">{authers}</a>
+    await message.reply(f"<code>{quote}</code>\n~ <b>{tag}</b>")    
 
 @app.on_message(filters.text & filters.private)
 async def send_quote(_, message):
