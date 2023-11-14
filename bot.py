@@ -4,6 +4,7 @@ from pyrogram import Client, filters
 import wikiquotes
 from flask import Flask
 from threading import Thread
+import random
 
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
@@ -17,13 +18,32 @@ app = Client(
 )
 
 
+indexs = [
+    "Zig Ziglar", "Dale Carnegie", "Stephen R. Covey", "Napoleon Hill", "Jim Rohn",
+    "Brian Tracy", "Eric Thomas", "Les Brown", "Jack Canfield", "Mark Manson",
+    "Simon Sinek", "Gary Vaynerchuk", "Mel Robbins", "Grant Cardone", "Robin Sharma",
+    "Motivation", "Inspiration", "Consistency", "Quotes", "Education", "Encourage",
+    "Love", "Care", "Romantic", "Beautiful", "Respect", "Humanity", "Life", "Afterlife",
+    "Determination", "Perseverance", "Dedication", "Success", "Wisdom", "Faith", "Courage",
+    "Hope", "Passion", "Gratitude", "Joy", "Harmony", "Serenity", "Positivity", "Growth",
+    "Patience", "Resilience", "Dream", "Believe", "Achieve", "Empower", "Thrive", "Connection",
+    "Balance", "Innerpeace", "Enlightenment", "Kindness", "Compassion", "Generosity",
+    "Forgiveness", "Grace", "Spirituality", "Transformation", "Legacy", "Purpose", "Eternity",
+]
+
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
-    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /qoute")
+    await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /quote")
 
 @app.on_message(filters.command("quote") & filters.private)
 async def send_quote_of_the_day(client, message):
     quote = wikiquotes.quote_of_the_day("english")
+    await message.reply(f"<code>{quote}</code>")
+
+@app.on_message(filters.command("random") & filters.private)
+async def send_random_quote(_, message):
+    author = random.choice(indexs)
+    quote = wikiquotes.random_quote(author, "english")
     await message.reply(f"<code>{quote}</code>")
 
 @app.on_message(filters.text & filters.private)
