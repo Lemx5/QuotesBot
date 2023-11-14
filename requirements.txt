@@ -1,6 +1,6 @@
 pyrogram
 tgcrypto
 pytz
-wikiqoutes
+wikiquotes
 requests
 flask
