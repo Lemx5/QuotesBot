@@ -93,18 +93,20 @@ async def fetch_quote_content():
                 # Check if the response is a list of quotes
                 if isinstance(quote_data, list) and len(quote_data) > 0:
                     quote = quote_data[0]
-                    return quote.get("content", None)
+                    return quote.get("content", None), quote.get("author", None)
                 
                 # If not a list, assume it's a single quote
-                return quote_data.get("content", None)
+                return quote_data.get("content", None), quote_data.get("author", None)
             else:
                 print(f"Error: Unable to fetch quote. Status code: {response.status}")
-                return None
+                return None, None
+
 
 @app.on_message(filters.command("quotes"))
 async def send_quote(_, message):
-    quote = await fetch_quote_content()
-    await message.reply(f"<code>{quote}</code>")
+    quote_content, quote_author = await fetch_quote_content()
+    auther = quote_author.replace(" ", "_")
+    await message.reply(f'<code>{quote_content}</code>\n~ <b><a href="https://en.wikiquote.org/wiki/{auther}">{quote_author}</a></b>', disable_web_page_preview=True)
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
