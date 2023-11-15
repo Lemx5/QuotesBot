@@ -3,3 +3,4 @@ tgcrypto
 pytz
 wikiquotes
 flask
+aiohttp

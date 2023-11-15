@@ -4,6 +4,8 @@ import wikiquotes
 from flask import Flask
 from threading import Thread
 import random
+import asyncio
+import aiohttp
 
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
@@ -79,12 +81,36 @@ authers = [
     "Saina Nehwal", "P. V. Sindhu", "Vishwanathan Anand", "Kapil Dev", "Sunil Gavaskar",
 ]
 
+# To fetch random Quotes
+async def fetch_quote_content():
+    url = "https://api.quotable.io/quotes/random"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                quote_data = await response.json()
+                
+                # Check if the response is a list of quotes
+                if isinstance(quote_data, list) and len(quote_data) > 0:
+                    quote = quote_data[0]
+                    return quote.get("content", None)
+                
+                # If not a list, assume it's a single quote
+                return quote_data.get("content", None)
+            else:
+                print(f"Error: Unable to fetch quote. Status code: {response.status}")
+                return None
+
+@app.on_message(filters.command("quote"))
+async def send_quote(_, message):
+    quote = await fetch_quote_content()
+    await message.reply(f"<code>{quote}</code>")
 
 @app.on_message(filters.command("start") & filters.private)
 async def start(_, message):
     await message.reply(f"<b>Hi {message.from_user.mention}!\nI'm a bot that sends quotes, Send me author's name to get a quote from them or send</b> /random")
 
-@app.on_message(filters.command("quote") & filters.private)
+@app.on_message(filters.command("qotd") & filters.private)
 async def send_quote_of_the_day(client, message):
     quote = wikiquotes.quote_of_the_day("english")
     await message.reply(f"<code>{quote}</code>")
@@ -103,7 +129,7 @@ async def send_author_quote(_, message):
     await message.reply(f'<code>{quote}</code>\n~ <b><a href="https://en.wikiquote.org/wiki/{pubs}">{people}</a></b>', disable_web_page_preview=True)
 
 @app.on_message(filters.text & filters.private)
-async def send_quote(_, message):
+async def send_quotes(_, message):
     author = message.text
     quote = wikiquotes.random_quote(author, "english")
     await message.reply(f"<code>{quote}</code>")
