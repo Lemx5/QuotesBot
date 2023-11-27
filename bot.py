@@ -114,8 +114,11 @@ async def start(_, message):
 
 @app.on_message(filters.command("qotd") & filters.private)
 async def send_quote_of_the_day(client, message):
-    quote = wikiquotes.quote_of_the_day("english")
-    await message.reply(f"<code>{quote}</code>")
+    q_tuple = wikiquotes.quote_of_the_day("english")
+    quote = q_tuple[0]
+    auther = q_tuple[1]
+    authr = auther.replace(" ", "_")
+    await message.reply(f'<code>{quote}</code>\n~ <b><a href="https://en.wikiquote.org/wiki/{authr}">{auther}</a></b>', disable_web_page_preview=True)
 
 @app.on_message(filters.command("random") & filters.private)
 async def send_random_quote(_, message):
